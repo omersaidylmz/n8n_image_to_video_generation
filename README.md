@@ -1,7 +1,7 @@
 # No- Code Workflow İle Görselleştirme ve Video Oluşturma
 ## Herkese Merhaba Arkadaşlar 🚀
 
-### Basit girdileri detaylı reklam görselleri oluşturan promptlar haline getirip sonrasında oluşturulan görsellerden video üreten n8n iş akış şemamın çıktıları aşağıda ki gibidir.
+### Telegram üzerinden basit girdileri detaylı reklam görselleri oluşturan promptlar haline getirip sonrasında oluşturulan görsellerden video üreten ve çıktı olarak veren n8n iş akış şemamın çıktıları aşağıda ki gibidir.
 
 ## Oluşturulan Görsel
 
@@ -19,3 +19,4 @@ https://github.com/user-attachments/assets/63e89393-c4f5-48ba-9f2a-9622b1a39bc6
 ### 🤖 Flux-Pro ( Text - To - İmage Model )
 ### 🤖 Minimax-Hailuo-02 ( İmage- To - Video Model )
 ### 🚀 Novita Al ( Video Model Provider )
+### 📲 Telegram Api ( Telegramı Kullanmak İçin )
