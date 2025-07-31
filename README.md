@@ -1,4 +1,4 @@
-# No- Code Workflow İle Görselleştirme ve Video Oluşturma
+# No- Code n8n Workflow İle Görselleştirme ve Video Oluşturma
 ## Herkese Merhaba Arkadaşlar 🚀
 
 ### Telegram üzerinden basit girdileri detaylı reklam görselleri oluşturan promptlar haline getirip sonrasında oluşturulan görsellerden video üreten ve çıktı olarak veren n8n iş akış şemamın çıktıları aşağıda ki gibidir.
