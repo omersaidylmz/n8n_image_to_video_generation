@@ -1,0 +1,459 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bfl.ai/v1/flux-pro",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-key",
+              "value": "BFL API KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n  \"width\": 1024,\n  \"height\": 768,\n  \"steps\": 20\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -384,
+        48
+      ],
+      "id": "a00eb7da-17c1-44c1-b29d-49181b5da4b2",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.polling_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-key",
+              "value": "BFL API KEY"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        48
+      ],
+      "id": "52f18ab3-9f36-4f5c-b4fe-2f75464da9b7",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Sen, kullanıcıların genel fikirlerini alıp, görsel üretim yapay zeka modelleri için son derece detaylı, açıklayıcı ve sanatsal olarak zengin prompt'lara dönüştüren gelişmiş bir Prompt Mühendisisin.\n\n**Görevin:**\nKullanıcının isteğini, görselleştirilecek konuyu, stili, aydınlatmayı, kompozisyonu, atmosferi, renkleri, dokuları ve diğer tüm önemli görsel detayları içeren, tek bir, kapsamlı ve İngilizce bir prompt cümlesi olarak sunmaktır.\n\n**Yapacakların:**\n* Kullanıcının basit veya genel fikirlerini alıp, görsel üretim için gereken tüm detayları ekleyerek genişlet.\n* Konuyu, eylemi, ortamı, zamanı, ışıklandırmayı (örneğin, \"altın saat\", \"neon ışıklar\"), renk paletini, dokuları (örneğin, \"pürüzsüz ipek\", \"paslı metal\"), atmosferi (örneğin, \"huzurlu\", \"gerilimli\"), sanatsal stili (örneğin, \"sürrealist tablo\", \"distopik bilim kurgu fotoğrafı\", \"anime karakteri\") ve kompozisyonu (örneğin, \"geniş açı\", \"yakın çekim\", \"portre\") açıkça belirt.\n* Görseli zihinde canlandırmaya yardımcı olacak betimleyici ve çağrıştırıcı bir dil kullan.\n* Oluşturduğun prompt'u her zaman İngilizce olarak yaz.\n* Çıktın sadece oluşturduğun prompt cümlesi olmalıdır. Başka hiçbir metin (giriş, açıklama, soru, selamlama vb.) içermemelidir.\n\n**Yapmayacakların:**\n* Kullanıcıya açıklayıcı sorular sorma.\n* Herhangi bir sohbet veya etkileşimde bulunma.\n* Prompt dışında herhangi bir ek metin (giriş, sonuç, açıklama, notlar) oluşturma.\n* Görsel üretme veya görselle ilgili herhangi bir görsel çıktı sunma.\n* Kullanıcının niyetine dair varsayımlarda bulunma veya prompt'a kullanıcı tarafından belirtilmeyen detaylar ekleme (belirtilen fikri detaylandırmak hariç).\n* Güvenli olmayan, nefret dolu, ayrımcı, yasa dışı veya cinsel içerikli prompt'lar oluşturma. Kullanıcı açıkça talep etse bile bu tür içeriklerden kaçın.\n* Eğer kullanıcı görselde belirli bir dilde veya alfabede metin olmasını isterse, bu metni çevirme veya başka bir alfabeye dönüştürme; orijinal dil ve alfabeyi koru.\n\n**Çıktı Formatı:**\nSadece oluşturduğun prompt cümlesi."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -720,
+        -128
+      ],
+      "id": "0689f930-1f22-4cc4-b7a7-af9541f1fa63",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        64
+      ],
+      "id": "c9bfac85-f9bb-42d8-8c11-b84649d3413d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6fD1KvfVNJYA8bAs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "file": "={{ $json.videos[0].video_url }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        -144
+      ],
+      "id": "6c249d39-cb1f-4b1b-be0e-c177d0beb04f",
+      "name": "Send a document",
+      "webhookId": "3b698204-3e80-42a4-984e-d7568fc9d953",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVm3wD4nsxY6qug5",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -944,
+        -128
+      ],
+      "id": "31b8ffc5-98dc-495e-84e0-8380e5223019",
+      "name": "Telegram Trigger",
+      "webhookId": "708da0bc-40c0-4d16-9bd6-0437860009c3",
+      "credentials": {
+        "telegramApi": {
+          "id": "RVm3wD4nsxY6qug5",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc70c8f2-2483-478c-96bb-2e13b5974a78",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Ready",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        -128
+      ],
+      "id": "2f5e425f-5fc9-40d4-b908-00511d41d25c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        -128
+      ],
+      "id": "e5a0cbc6-0803-4756-9f0a-978cc3aa6bf5",
+      "name": "Wait",
+      "webhookId": "8ef07081-00a5-4077-ac7d-5bc7cbdaf466"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.result.prompt }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Convert the image that generated this {{ $json.result.prompt }} into a 6-second video with fluid, cinematic movements. Maintain the style, lighting, and atmosphere of the original scene. Bring subtle elements such as light, depth, wind, or perspective changes to life without altering the basic composition. The output should only be the generated prompt."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        304,
+        -144
+      ],
+      "id": "8687ce2d-62b6-4844-b638-348ba52af081",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        304,
+        48
+      ],
+      "id": "77ef5e06-fff6-4c88-aa4a-a2fafc049594",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6fD1KvfVNJYA8bAs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.novita.ai/v3/async/minimax-hailuo-02",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer API KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_url\": \"{{ $('HTTP Request1').item.json.result.sample }}\",\n  \"prompt\": \"{{ $json.text }}\",\n  \"duration\": 6,\n  \"resolution\": \"768P\",\n  \"enable_prompt_expansion\": true\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        32
+      ],
+      "id": "7abfcdd8-4bc9-4f65-83e9-57f8af011467",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "amount": 120
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        -144
+      ],
+      "id": "19f99172-de21-4cf6-9ba8-b45a4be74d4f",
+      "name": "Wait1",
+      "webhookId": "6a5f7c77-84f6-41be-b083-abd7bb5a714d"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.novita.ai/v3/async/task-result?task_id={{ $json.task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer API KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        928,
+        32
+      ],
+      "id": "6f8a5fc8-6a4e-46ab-a7b3-f7dfde141fce",
+      "name": "HTTP Request3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a document": {
+      "main": [
+        []
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Send a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2a8619cf-d4af-42c8-a05a-0d4578252fb5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2f4bff775a856c1823ad990d39363d9217a86dff3299aa6fd714091cb740e860"
+  },
+  "id": "gGTFNaPY5GCVqW02",
+  "tags": []
+}
