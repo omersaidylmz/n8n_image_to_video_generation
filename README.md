@@ -11,6 +11,12 @@
 
 https://github.com/user-attachments/assets/63e89393-c4f5-48ba-9f2a-9622b1a39bc6
 
+
+## n8n workflow şeması
+
+<img width="1668" height="686" alt="Ekran görüntüsü 2025-07-31 230058" src="https://github.com/user-attachments/assets/0cf27fab-b157-4c0b-ada9-a1398d20dedd" />
+
+
 ## Kullanılan Teknolojiler Ve Araçlar 🔧
 
 ### 🤖 Gemini 2.5 Flash ( LLM )
